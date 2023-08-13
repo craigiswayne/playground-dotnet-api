@@ -1,3 +1,17 @@
+# playground-dotnet-api
+
+```shell
+mkdir playground-dotnet-api
+cd playground-dotnet-api
+dotnet new webapi --framework net7.0
+git init
+dotnet new gitignore
+mkdir -p playground-dotnet-api-tests
+dotnet new nunit
+```
+
+---
+
 ### Rate Limiting
 Requires .NET 7
 
