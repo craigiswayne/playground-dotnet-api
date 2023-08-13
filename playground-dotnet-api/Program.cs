@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
-    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;;
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     rateLimiterOptions.AddFixedWindowLimiter("fixed-window", fixedWindowOptions =>
     {
         fixedWindowOptions.Window = TimeSpan.FromSeconds(5);
