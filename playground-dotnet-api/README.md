@@ -75,3 +75,14 @@ Resources:
 * https://dotnetthoughts.net/implementing-content-security-policy-in-aspnetcore/
 * https://blog.elmah.io/the-asp-net-core-security-headers-guide/
 * https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/write?view=aspnetcore-7.0
+
+---
+
+### GitHub Actions
+```shell
+mkdir -p .github/workflows
+touch .github/workflows/build_and_test.yml
+```
+
+References:
+* https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
