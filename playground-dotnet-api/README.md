@@ -34,3 +34,44 @@ using Microsoft.AspNetCore.RateLimiting;
 ...
 [EnableRateLimiting("fixed-window")]
 ```
+
+----
+
+### Security Headers
+Because there's a few headers we need to add, we'll create a middleware implementation
+
+```shell
+mkdir -p Middleware
+touch Middleware/SecurityHeaders.cs
+```
+
+see `Middleware/SecurityHeaders.cs` for contents
+
+In `Program.cs`
+
+```c#
+using playground_dotnet_api.Middleware;
+...
+
+var builder = WebApplication.CreateBuilder(args);
+// add the below
+builder.WebHost.UseKestrel(option => option.AddServerHeader = false);
+
+//
+
+builder.Services.AddHsts(options =>
+{
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365);
+});
+
+//
+
+// before app.MapControllers();
+app.UseSecurityHeaders();
+```
+
+Resources:
+* https://dotnetthoughts.net/implementing-content-security-policy-in-aspnetcore/
+* https://blog.elmah.io/the-asp-net-core-security-headers-guide/
+* https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/write?view=aspnetcore-7.0
