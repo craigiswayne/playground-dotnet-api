@@ -25,8 +25,9 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 
 builder.Services.AddHsts(options =>
 {
+    options.Preload = true;
     options.IncludeSubDomains = true;
-    options.MaxAge = TimeSpan.FromDays(365);
+    options.MaxAge = TimeSpan.FromDays(180);
 });
 
 var app = builder.Build();
