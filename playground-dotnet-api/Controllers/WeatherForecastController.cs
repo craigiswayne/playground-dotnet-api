@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace playground_dotnet_api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[EnableRateLimiting("fixed-window")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
