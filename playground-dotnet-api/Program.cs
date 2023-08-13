@@ -1,7 +1,9 @@
 ﻿using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using playground_dotnet_api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseKestrel(option => option.AddServerHeader = false);
 
 // Add services to the container.
 
@@ -21,6 +23,12 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     });
 });
 
+builder.Services.AddHsts(options =>
+{
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +38,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSecurityHeaders();
 app.UseRateLimiter();
 app.UseHttpsRedirection();
 
