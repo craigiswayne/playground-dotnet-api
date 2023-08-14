@@ -7,45 +7,147 @@
 	},
 	"item": [
 		{
-			"name": "WeatherForecast",
+			"name": "Successful Responses",
+			"item": [
+				{
+					"name": "WeatherForecast",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const json = pm.response.json();",
+									"",
+									"pm.test('Response should be an array', () => {",
+									"    pm.expect(json instanceof Array).to.be.true;",
+									"})",
+									"",
+									"pm.test('Response should have 5 items', () => {",
+									"    pm.expect(json.length).eql(5);",
+									"})",
+									"",
+									"const headers = pm.response.headers;",
+									"console.log('headers', headers);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/WeatherForecast",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"WeatherForecast"
+							]
+						}
+					},
+					"response": []
+				}
+			],
 			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
 				{
 					"listen": "test",
 					"script": {
+						"type": "text/javascript",
 						"exec": [
-							"const json = pm.response.json();",
+							"pm.test('[FOLDER] Response should be ok', () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
 							"",
-							"pm.test('Response should be an array', () => {",
-							"    pm.expect(json instanceof Array).to.be.true;",
-							"})",
+							"const expectedHeaders = {",
+							"    \"Content-Type\": \"application/json\"",
+							"};",
 							"",
-							"pm.test('Response should have 5 items', () => {",
-							"    pm.expect(json.length).eql(5);",
-							"})",
+							"Object.keys(expectedHeaders).forEach(header => {",
+							"    pm.test(`[FOLDER] ${header} header is present`, () => {",
+							"        pm.response.to.have.header(header);",
+							"    });",
 							"",
-							"const headers = pm.response.headers;",
-							"console.log('headers', headers);"
-						],
-						"type": "text/javascript"
+							"    pm.test(`[FOLDER] ${header} header is application/json`, () => {",
+							"        pm.expect(pm.response.headers.get(header))",
+							"            .to.contain(expectedHeaders[header]);",
+							"    });",
+							"});"
+						]
 					}
 				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://localhost:7068/WeatherForecast",
-					"protocol": "https",
-					"host": [
-						"localhost"
+			]
+		},
+		{
+			"name": "Failure Testing",
+			"item": [
+				{
+					"name": "404 Endpoint",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response should be \"Not Found\"', () => {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
-					"port": "7068",
-					"path": [
-						"WeatherForecast"
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}",
+							"host": [
+								"{{API_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Method Not Allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response should be \"Method Not Allowed\"', () => {",
+									"    pm.response.to.have.status(405);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}/WeatherForecast",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"WeatherForecast"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -63,17 +165,12 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"pm.test('[COLLECTION] Response should be ok', () => {",
-					"    pm.response.to.have.status(200);",
-					"});",
-					"",
 					"const expectedHeaders = {",
-					"    \"Content-Type\": \"application/json\",",
 					"    \"Content-Security-Policy\": \"default-src 'self';\",",
 					"    \"X-Frame-Options\": \"DENY\",",
 					"    \"X-Xss-Protection\": \"1; mode=block\",",
 					"    \"X-Content-Type-Options\": \"nosniff\",",
-					"    \"Referrer-Policy\": \"no-referrer\",",
+					"    \"Referrer-Policy\": \"same-origin\",",
 					"    \"X-Permitted-Cross-Domain-Policies\": \"none\",",
 					"    \"Permissions-Policy\": \"accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()\"",
 					"};",
@@ -94,6 +191,13 @@
 					"})"
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "https://localhost:7068",
+			"type": "string"
 		}
 	]
 }
