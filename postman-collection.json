@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ec2c6120-190e-45c7-8266-16a359801fa9",
+		"_postman_id": "05d597a2-a2a5-4234-85fb-4c079cb46aa4",
 		"name": "DotNet API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1691069"
@@ -176,7 +176,7 @@
 					"};",
 					"",
 					"Object.keys(expectedHeaders).forEach(header => {",
-					"    pm.test(`[COLLECTION] ${header} header is present`, () => {",
+					"    pm.test(`[COLLECTION] '${header}' header is present`, () => {",
 					"        pm.response.to.have.header(header);",
 					"    });",
 					"",
@@ -186,9 +186,17 @@
 					"    });",
 					"})",
 					"",
-					"pm.test('[COLLECTION] should not have the \"Server\" header', () => {",
-					"    pm.response.to.not.have.header('Server');",
-					"})"
+					"const unexpectedHeaders = [",
+					"    \"X-Powered-By\",",
+					"    \"Server\"",
+					"];",
+					"",
+					"unexpectedHeaders.forEach(header => {",
+					"    pm.test(`[COLLECTION] '${header}' header is not present`, () => {",
+					"        pm.response.to.not.have.header(header);",
+					"    })",
+					"})",
+					""
 				]
 			}
 		}

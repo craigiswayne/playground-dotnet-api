@@ -1,4 +1,6 @@
-﻿namespace playground_dotnet_api.Middleware;
+﻿using System.Collections.Specialized;
+
+namespace playground_dotnet_api.Middleware;
 
 public class SecurityHeadersMiddleware
 {
@@ -11,40 +13,36 @@ public class SecurityHeadersMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (!context.Response.Headers.ContainsKey("Content-Security-Policy"))
+        NameValueCollection headersToAdd = new NameValueCollection();
+        headersToAdd["Content-Security-Policy"] = "default-src 'self';";
+        headersToAdd["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
+        headersToAdd["Referrer-Policy"] = "same-origin";
+        headersToAdd["X-Content-Type-Options"] = "nosniff";
+        headersToAdd["X-Frame-Options"] = "DENY";
+        headersToAdd["X-Permitted-Cross-Domain-Policies"] = "none";
+        headersToAdd["X-Xss-Protection"] = "1; mode=block";
+
+        foreach (string header in headersToAdd)
         {
-            context.Response.Headers.Add("Content-Security-Policy", "default-src 'self';");
+            if (context.Response.Headers.ContainsKey(header)){
+                continue;
+            }
+
+            context.Response.Headers.Add(header, headersToAdd[header]);
         }
 
-        if (!context.Response.Headers.ContainsKey("Permissions-Policy"))
+        string[] headersToRemove = new string[]{
+            "X-Powered-By",
+        };
+
+        foreach (string header in headersToRemove)
         {
-            context.Response.Headers.Add("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
+            if (!context.Response.Headers.ContainsKey(header)){
+                continue;
+            }
+            context.Response.Headers.Remove(header);
         }
 
-        if (!context.Response.Headers.ContainsKey("Referrer-Policy"))
-        {
-            context.Response.Headers.Add("Referrer-Policy", "same-origin");
-        }
-
-        if (!context.Response.Headers.ContainsKey("X-Content-Type-Options"))
-        {
-            context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-        }
-
-        if (!context.Response.Headers.ContainsKey("X-Frame-Options"))
-        {
-            context.Response.Headers.Add("X-Frame-Options", "DENY");
-        }
-
-        if (!context.Response.Headers.ContainsKey("X-Permitted-Cross-Domain-Policies"))
-        {
-            context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", "none");
-        }
-
-        if (!context.Response.Headers.ContainsKey("X-Xss-Protection"))
-        {
-            context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-        }
 
         await _next(context);
     }
