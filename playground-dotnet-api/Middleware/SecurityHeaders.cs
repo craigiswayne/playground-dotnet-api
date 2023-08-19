@@ -5,16 +5,18 @@ namespace playground_dotnet_api.Middleware;
 public class SecurityHeadersMiddleware
 {
     private readonly RequestDelegate _next;
+    public IConfiguration _configuration;
 
-    public SecurityHeadersMiddleware(RequestDelegate next)
+    public SecurityHeadersMiddleware(RequestDelegate next, IConfiguration configuration)
     {
         _next = next;
+        _configuration = configuration;
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
         NameValueCollection headersToAdd = new NameValueCollection();
-        headersToAdd["Access-Control-Allow-Origin"] = "*";
+        headersToAdd["Access-Control-Allow-Origin"] = _configuration["AllowedOrigins"];
         headersToAdd["Content-Security-Policy"] = "default-src 'self';";
         headersToAdd["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
         headersToAdd["Referrer-Policy"] = "same-origin";
