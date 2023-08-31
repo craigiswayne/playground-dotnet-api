@@ -129,3 +129,4 @@ touch .github/workflows/build_and_test.yml
 References:
 * https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 * [Project Structure](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-7.0&tabs=visual-studio-mac#add-a-model-class)
+* [CORS](https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-7.0#np)

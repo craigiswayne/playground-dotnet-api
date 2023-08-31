@@ -16,7 +16,7 @@ public class SecurityHeadersMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         NameValueCollection headersToAdd = new NameValueCollection();
-        headersToAdd["Access-Control-Allow-Origin"] = _configuration["AllowedOrigins"];
+        // headersToAdd["Access-Control-Allow-Origin"] = _configuration["AllowedOrigins"];
         headersToAdd["Content-Security-Policy"] = "default-src 'self';";
         headersToAdd["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
         headersToAdd["Referrer-Policy"] = "same-origin";
