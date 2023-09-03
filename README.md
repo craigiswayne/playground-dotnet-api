@@ -125,7 +125,38 @@ Resources:
 mkdir -p .github/workflows
 touch .github/workflows/build_and_test.yml
 ```
+----
 
-References:
+### Migration
+Create Migration
+```shell
+cd playground-dotnet-api
+dotnet tool install --global dotnet-ef
+dotnet ef migrations add Initial -o Migrations --context MyDbContextSqLite -v
+```
+
+Update Migration
+```shell
+dotnet ef database update --context MyDbContextSqLite -v
+```
+
+---
+
+### Terms
+| Terms      | Short Description                                                                          |
+|------------|--------------------------------------------------------------------------------------------|
+| Migrations | Basically DB as Code. Allows you to use your code as the source of truth for the DB Schema |
+
+----
+
+### References:
 * https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 * [Project Structure](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-7.0&tabs=visual-studio-mac#add-a-model-class)
+* [DBContext](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
+* [Custom Logging for Endpoints](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/controllers-and-routing/understanding-action-filters-cs)
+* [Output Caching](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/controllers-and-routing/improving-performance-with-output-caching-cs)
+* [Getting Started with Entity Framework Core](https://www.youtube.com/watch?v=JzfWpiowtqI)
+* [Migrations Explained](https://www.youtube.com/watch?v=fl6r-9rQjns)
+* [Seed DB](https://www.youtube.com/watch?v=z-Hll4Xddjs)
+* [Sqlite & Entity Framework Core](https://www.youtube.com/watch?v=z-Hll4Xddjs)
+* [Registering Services](https://www.youtube.com/watch?v=sSq3GtriFuM)

@@ -1,11 +1,20 @@
 ﻿using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
+using playground_dotnet_api.Data;
 using playground_dotnet_api.Middleware;
+using playground_dotnet_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseKestrel(option => option.AddServerHeader = false);
 
-// Add services to the container.
+var connectionStringSqlite = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionType = builder.Configuration.GetSection("Db").GetValue<string>("Type");
+if (connectionType == "sqlite")
+{
+    builder.Services.AddDbContext<MyDbContextSqLite>(options => options.UseSqlite(connectionStringSqlite));
+}
+
+builder.Services.AddScoped<IPokedexService, PokedexService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
