@@ -1,5 +1,7 @@
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using playground_dotnet_api.Models;
+using playground_dotnet_api.Services;
 
 namespace playground_dotnet_api.Controllers;
 
@@ -10,40 +12,22 @@ public class PokedexController : ControllerBase
 {
     // TODO: Custom ControllerBase
     // TODO: Custom ControllerBase for logging
-    private readonly ILogger<PokedexController> _logger;
+    private readonly IPokedexService _pokedexService;
 
-    public PokedexController(ILogger<PokedexController> logger)
+    public PokedexController(IPokedexService pokedexService)
     {
-        _logger = logger;
+        _pokedexService = pokedexService;
     }
     
     [HttpGet]
-    [Produces("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult<List<Pokemon>> List()
     {
-        var pokemon = new List<Pokemon>
-        {
-            new Pokemon {
-                Id = 1,
-                Name = "Bulbasaur"
-            },
-            new Pokemon {
-                Id = 2,
-                Name = "Ivysaur"
-            },
-            new Pokemon {
-                Id = 3,
-                Name = "Venasaur"
-            },
-            new Pokemon {
-                Id = 4,
-                Name = "Charmander"
-            }
-        };
+        var pokemon = _pokedexService.List();
 
-        if (pokemon.Count == 0)
+        if (!pokemon.Any())
         {
             return StatusCode(StatusCodes.Status204NoContent);
         }
